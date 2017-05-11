@@ -18,13 +18,23 @@ public class ListarReunioes extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
 
         DaoReuniao daoReuniao = new DaoReuniao();
-
+        
+        List<Reuniao> reunioesConcluidas = daoReuniao.findByStatus("Concluida");
         List<Reuniao> reunioesCadastradas = daoReuniao.findByStatus("Cadastrada");
         List<Reuniao> reunioesAguardandoConfirmacao = daoReuniao.findByStatus("Aguardando Confirmação");
         List<Reuniao> reunioesConfirmadas = daoReuniao.findByStatus("Confirmada");
-        List<Reuniao> reunioesRecusadas = daoReuniao.findByStatus("Recusada");
-        List<Reuniao> reunioesConcluidas = daoReuniao.findByStatus("Concluida");
+        List<Reuniao> reunioesRecusadas = daoReuniao.findByStatus("Recusada"); 
+        List<Reuniao> reunioesEncerradas = daoReuniao.findByStatus("Encerrada");
+        
+        System.out.println(" eu passe aqui Tamanho da lista ################################ " + reunioesCadastradas.size());
 
+        for (Reuniao r : reunioesCadastradas) {
+
+            System.out.println("Esse e o Id ################################ " + r.getAssunto());
+            System.out.println("Esse e o assunto ########################### " + r.getIdReuniao());
+        }
+
+        request.setAttribute("reunioesEncerradas", reunioesEncerradas);
         request.setAttribute("reunioesCadastradas", reunioesCadastradas);
         request.setAttribute("reunioesAguardandoConfirmacao", reunioesAguardandoConfirmacao);
         request.setAttribute("reunioesRecusadas", reunioesRecusadas);

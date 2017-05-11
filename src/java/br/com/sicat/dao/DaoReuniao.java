@@ -17,6 +17,9 @@ public class DaoReuniao extends GenericDAO<Reuniao> {
         Criteria crit = s.createCriteria(Reuniao.class);
         crit.add(Restrictions.eq("status", status));
         return crit.list();
+
+
+
     }
 
 }

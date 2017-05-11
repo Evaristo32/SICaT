@@ -12,6 +12,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
@@ -29,6 +30,13 @@ public class SalvarReuniao extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
 
         java.util.Date agora = new java.util.Date();
+        Date data = null;
+        Date hora = null;
+        Date dataAtual = new Date();
+       
+//        Calendar dataLimite = Calendar.getInstance();
+//            dataLimite.setTime(new java.util.Date());
+//            dataLimite.add(Calendar.DAY_OF_MONTH, -1);//
 
         DaoReivindicacao daoReivindicacao = new DaoReivindicacao();
         DaoReuniao daoReuniao = new DaoReuniao();
@@ -52,51 +60,68 @@ public class SalvarReuniao extends HttpServlet {
             reuniao.setCriadaPeloRepresentante(request.getUserPrincipal().toString());
 
             String dataTexto = request.getParameter("data");
-            DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-            
-            try {
-                Date data = formatter.parse(dataTexto);
-                
-                reuniao.setData(data);
-            } catch (ParseException ex) {
-                Logger.getLogger(SalvarReuniao.class.getName()).log(Level.SEVERE, null, ex);
-            }
-
             String horaTexto = request.getParameter("hora");
-            formatter = new SimpleDateFormat("HH:mm:ss");
-            try {
-                Date hora = formatter.parse(horaTexto);
-                reuniao.setHora(hora);
-            } catch (ParseException ex) {
-                Logger.getLogger(SalvarReuniao.class.getName()).log(Level.SEVERE, null, ex);
-            }
-           
-            reuniao.setReivindicacoes(reivindicacaoesParaSalvarReuniao);
+            
 
-            if (reuniao.getAssunto() == null || reuniao.getAssunto().trim().equals("")) {
-                String msgAlerta = "Campo assunto é obrigatório.";
-                request.setAttribute("msgAlerta", msgAlerta);
-            }
+            String msgCondicao = VerificarData(dataAtual, data, hora, dataTexto, horaTexto);
+            if (msgCondicao.equals("")) {
 
-            if (reuniao.getDescricao() == null
-                    || reuniao.getDescricao().trim().equals("")) {
-                String msgAlerta = "Campo descrição é obrigatório.";
-                request.setAttribute("msgAlerta", msgAlerta);
-            } else {
+                DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 
-                String status = "Andamento";
-                for (Reivindicacao r : reivindicacaoesParaSalvarReuniao) {
+                try {
+                    data = formatter.parse(dataTexto);
 
-                    Reivindicacao reivindicacao = (Reivindicacao) daoReivindicacao.BuscarPorId(Reivindicacao.class, r.getIdReivindicacao());
-                    reivindicacao.setStatus(status);
-                    daoReivindicacao.AlterarReuniao(reivindicacao);
-
+                } catch (ParseException ex) {
+                    Logger.getLogger(SalvarReuniao.class.getName()).log(Level.SEVERE, null, ex);
                 }
 
-                daoReuniao.SalvarReuniao(reuniao);
-                String msgSucesso = "Reunião cadastrada com sucesso.";
-                request.setAttribute("msgSucesso", msgSucesso);
+                DateFormat formatter1 = new SimpleDateFormat("HH:mm");
+                try {
+//                    Date horaParaSalvar = ;
+                    reuniao.setHora(formatter1.parse(request.getParameter("hora")+":00"));
+                    System.out.println("Esse deu certo ##############################################  DEu certo " + hora);
 
+                } catch (ParseException ex) {
+                    Logger.getLogger(SalvarReuniao.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+                if (data.before(dataAtual)) {
+                    String msgAlerta = "Data de realização da reunião não pode ser menor que a data atual.";
+                    request.setAttribute("msgAlerta", msgAlerta);
+                } else if (reuniao.getAssunto() == null || reuniao.getAssunto().trim().equals("")) {
+                    String msgAlerta = "Campo assunto é obrigatório.";
+                    request.setAttribute("msgAlerta", msgAlerta);
+                } else if (reuniao.getDescricao() == null
+                        || reuniao.getDescricao().trim().equals("")) {
+                    String msgAlerta = "Campo descrição é obrigatório.";
+                    request.setAttribute("msgAlerta", msgAlerta);
+                } else {
+
+                    reuniao.setData(data);
+                 
+                   
+
+                    reuniao.setReivindicacoes(reivindicacaoesParaSalvarReuniao);
+
+                    String status = "Andamento";
+                    for (Reivindicacao r : reivindicacaoesParaSalvarReuniao) {
+
+                        Reivindicacao reivindicacao = (Reivindicacao) daoReivindicacao.BuscarPorId(Reivindicacao.class, r.getIdReivindicacao());
+                        reivindicacao.setStatus(status);
+                        daoReivindicacao.AlterarReuniao(reivindicacao);
+
+                    }
+
+                   
+                   daoReuniao.SalvarReuniao(reuniao);
+                    System.out.println("########################################### Hora " + reuniao.getHora());
+                    String msgSucesso = "Reunião cadastrada com sucesso.";
+                    request.setAttribute("msgSucesso", msgSucesso);
+
+                }
+            } else {
+                String msgAlerta = msgCondicao;
+                request.setAttribute("msgAlerta", msgAlerta);
             }
 
         } else {
@@ -114,6 +139,19 @@ public class SalvarReuniao extends HttpServlet {
         RequestDispatcher dispatcher = request.getRequestDispatcher("analizarReivindicacao.jsp");
         dispatcher.forward(request, response);
 
+    }
+
+    private String VerificarData(Date dataAtual, Date dataAgendada, Date hora, String dataTexto, String horaTexto) {
+
+        String msgAlerta = "";
+
+        if (dataTexto.equals("") || dataTexto == null) {
+            msgAlerta = "O campo data é de preenchimento obrigatoro.";
+        } else if (horaTexto.equals("") || horaTexto == null) {
+            msgAlerta = "O campo hora é de preenchimento obrigatoro.";
+        }
+
+        return msgAlerta;
     }
 
     @Override

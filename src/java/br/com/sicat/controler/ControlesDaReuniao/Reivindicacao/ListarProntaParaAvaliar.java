@@ -4,6 +4,7 @@ import br.com.sicat.dao.DaoReivindicacao;
 import br.com.sicat.model.Reivindicacao;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -18,9 +19,24 @@ public class ListarProntaParaAvaliar extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
 
         DaoReivindicacao daoReivindicacao = new DaoReivindicacao();
-        List<Reivindicacao> reivindicacoesEncerrado = daoReivindicacao.findByStatus("Pronta");
+        ArrayList<Reivindicacao> reivindicacoesParaAvaliar = new ArrayList<Reivindicacao>();
 
-        request.setAttribute("reivindicacoesEncerrado", reivindicacoesEncerrado);
+        List<Reivindicacao> reivindicacoesAtrasadas = daoReivindicacao.findByStatus("Atrasada");
+        List<Reivindicacao> reivindicacoesFinalizadas = daoReivindicacao.findByStatus("Finalizada");
+
+        for (Reivindicacao reivindicacoesAtrasada : reivindicacoesAtrasadas) {
+            reivindicacoesParaAvaliar.add(reivindicacoesAtrasada);
+            for (Reivindicacao reivindicacoesFinalizada : reivindicacoesFinalizadas) {
+                reivindicacoesParaAvaliar.add(reivindicacoesFinalizada);
+            }
+
+        }
+        if (reivindicacoesParaAvaliar.size() != 0) {
+            request.setAttribute("reivindicacoesParaAvaliar", reivindicacoesParaAvaliar);
+        } else {
+            String msgNenhumRegistro = "Não tem reivindicação para ser avaliar no momento.";
+            request.setAttribute("msgNenhumRegistro", msgNenhumRegistro);
+        }
         RequestDispatcher dispatcher = request.getRequestDispatcher("reivindicacoesEncerradas.jsp");
         dispatcher.forward(request, response);
 

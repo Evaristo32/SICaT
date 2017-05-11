@@ -1,4 +1,3 @@
-
 package br.com.sicat.controler.ControlesDaReuniao.Reuniao;
 
 import br.com.sicat.dao.DaoReuniao;
@@ -17,22 +16,22 @@ public class ListarReuniaoCordenador extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-           DaoReuniao daoReuniao = new DaoReuniao();
-     List<Reuniao> reunioesAguardandoConfirmacao = daoReuniao.findByStatus("Aguardando Confirmação");
+        DaoReuniao daoReuniao = new DaoReuniao();
+        List<Reuniao> reunioesAguardandoConfirmacao = daoReuniao.findByStatus("Aguardando Confirmação");
         List<Reuniao> reunioesConfirmadas = daoReuniao.findByStatus("Confirmada");
         List<Reuniao> reunioesRecusadas = daoReuniao.findByStatus("Recusada");
         List<Reuniao> reunioesConcluidas = daoReuniao.findByStatus("Concluida");
+        List<Reuniao> reunioesEncerradas = daoReuniao.findByStatus("Encerrada");
 
-    
+        request.setAttribute("reunioesEncerradas", reunioesEncerradas);
         request.setAttribute("reunioesAguardandoConfirmacao", reunioesAguardandoConfirmacao);
         request.setAttribute("reunioesRecusadas", reunioesRecusadas);
         request.setAttribute("reunioesConfirmadas", reunioesConfirmadas);
         request.setAttribute("reunioesConcluidas", reunioesConcluidas);
-      
+
         RequestDispatcher dispatcher = request.getRequestDispatcher("reuniao.jsp");
         dispatcher.forward(request, response);
-        
-        
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

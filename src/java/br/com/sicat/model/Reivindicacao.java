@@ -30,10 +30,11 @@ public class Reivindicacao {
     private Date hora;
     private String status;
     private String descricaoDaRejeicao;
-//    
-    @OneToOne//(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+// 
+    @OneToOne
     private AvaliacaoDoProcesso avaliacaoDoProcesso;
 
+    
     public String getUsuario() {
         return usuario;
     }

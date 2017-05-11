@@ -1,0 +1,51 @@
+.login {
+	width: 40%;
+	margin: 0 auto;
+}
+
+.panel-body {
+	text-align: center;
+}
+
+.panel-heading h2 {
+	margin: 0;
+	font-size: 17pt;
+	text-align: center;
+}
+
+.label-descricao label {
+	color: #555;
+	font-size: 13pt;
+	font-family: tahoma, sans-serif;
+}
+
+.input {
+	border-radius: 2px;
+}
+
+.input {
+    width: 60%;
+    height: 2em;
+    font-size: 15pt;
+    margin-top: 3px;
+    margin-bottom: 3px;
+    border-radius: 7px;
+}
+
+.input:focus {
+    background-color: #ffc;
+}
+
+.botaosubmit {
+    border-radius: 5px;
+    padding: 10px;
+    background-color: #00f;
+    color: #fff;
+    font-weight: bold;
+	text-transform: uppercase;
+}
+
+.botaosubmit:focus {
+    border: 1;
+	background-color: #007;
+}

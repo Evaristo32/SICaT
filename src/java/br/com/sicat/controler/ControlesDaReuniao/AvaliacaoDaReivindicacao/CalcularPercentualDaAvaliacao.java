@@ -38,6 +38,7 @@ public class CalcularPercentualDaAvaliacao {
         avaliacaoDoProcesso.setReivindicacao(reivindicacao);
         reivindicacao.setStatus("Encerrada");
         
+        
         DaoReivindicacao daoReivindicacao = new DaoReivindicacao();
         daoReivindicacao.AlterarReuniao(reivindicacao);
         
@@ -46,7 +47,9 @@ public class CalcularPercentualDaAvaliacao {
 
         String status = calcularStatus(percentualFinal);
         avaliacaoDoProcesso.setStatus(status);
-
+        avaliacaoDoProcesso.setMediaDoCoordenador(atendimentoDoCoordenador);
+        avaliacaoDoProcesso.setMediaDoRepresentante(atendimentoDoRepresentante);
+        
         return avaliacaoDoProcesso;
     }
 
@@ -151,17 +154,18 @@ public class CalcularPercentualDaAvaliacao {
         if (percentualFinal < 3.0) {
             statusDaAvaliacao = "Muito Ruim";
         }
-        if (percentualFinal > 3.0 && percentualFinal < 5.0) {
+        if (percentualFinal >= 3.0 && percentualFinal < 5.0) {
             statusDaAvaliacao = "Ruim";
         }
-        if (percentualFinal > 5.0 && percentualFinal < 7.0) {
+        if (percentualFinal >= 5.0 && percentualFinal < 7.0) {
             statusDaAvaliacao = "Neutro";
         }
-        if (percentualFinal > 7.0 && percentualFinal < 9.0) {
+        if (percentualFinal >= 7.0 && percentualFinal < 9.0) {
             statusDaAvaliacao = "Bom";
         }
-        if (percentualFinal > 9.0 && percentualFinal <= 10.0) {
+        if (percentualFinal >= 9.0 && percentualFinal <= 10.0) {
             statusDaAvaliacao = "Muito Bom";
+            
         }
 
         return statusDaAvaliacao;

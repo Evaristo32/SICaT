@@ -33,7 +33,7 @@ public class ExcluirReivindicacao extends HttpServlet {
             request.setAttribute("msgAlerta", msgAlerta);
         }
 
-        List<Reivindicacao> reivindicacoes = daoReivindicacao.findALL(Reivindicacao.class);
+        List<Reivindicacao> reivindicacoes = daoReivindicacao.findByUser(request.getUserPrincipal().toString());
 
         request.setAttribute("reivindicacoes", reivindicacoes);
         RequestDispatcher dispatcher = request.getRequestDispatcher("reivindicacao.jsp");

@@ -19,10 +19,10 @@ public class AlterarReuniao extends HttpServlet {
 
             long id = Long.parseLong(request.getParameter("idReuniao"));
             DaoReuniao daoReuniao = new DaoReuniao();
-           Reuniao reuniao =(Reuniao) daoReuniao.BuscarPorId(Reuniao.class, id);
+           Reuniao reuniaoRecusada =(Reuniao) daoReuniao.BuscarPorId(Reuniao.class, id);
             
             
-            request.setAttribute("reuniao", reuniao);
+            request.setAttribute("reuniaoRecusada", reuniaoRecusada);
             RequestDispatcher dispatcher = request.getRequestDispatcher("AlterarReuniao.jsp");
             dispatcher.forward(request, response);
 

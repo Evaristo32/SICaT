@@ -1,6 +1,7 @@
 package br.com.sicat.model;
 
 import java.util.Date;
+import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -27,19 +28,21 @@ public class AvaliacaoDoProcesso {
     private String status;
     private String usuario;
     private double percentualFinal;
+    private double mediaDoRepresentante;
+    private double mediaDoCoordenador;
 
     @Temporal(TemporalType.DATE)
     private Date data;
     @Temporal(TemporalType.TIME)
     private Date hora;
-    @OneToOne//(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToOne
     private Reivindicacao reivindicacao;
 
-    public Long getIdAvaliacaoDoProcesso() {
+    public long getIdAvaliacaoDoProcesso() {
         return idAvaliacaoDoProcesso;
     }
 
-    public void setIdAvaliacaoDoProcesso(Long idAvaliacaoDoProcesso) {
+    public void setIdAvaliacaoDoProcesso(long idAvaliacaoDoProcesso) {
         this.idAvaliacaoDoProcesso = idAvaliacaoDoProcesso;
     }
 
@@ -113,6 +116,22 @@ public class AvaliacaoDoProcesso {
 
     public void setPercentualFinal(double percentualFinal) {
         this.percentualFinal = percentualFinal;
+    }
+
+    public double getMediaDoRepresentante() {
+        return mediaDoRepresentante;
+    }
+
+    public void setMediaDoRepresentante(double mediaDoRepresentante) {
+        this.mediaDoRepresentante = mediaDoRepresentante;
+    }
+
+    public double getMediaDoCoordenador() {
+        return mediaDoCoordenador;
+    }
+
+    public void setMediaDoCoordenador(double mediaDoCoordenador) {
+        this.mediaDoCoordenador = mediaDoCoordenador;
     }
 
     public Date getData() {

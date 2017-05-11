@@ -1,7 +1,9 @@
 package br.com.sicat.dao;
 
+import br.com.sicat.model.AvaliacaoDoProcesso;
 import br.com.sicat.model.Reivindicacao;
 import br.com.sicat.model.Reuniao;
+import java.util.Date;
 import java.util.List;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -41,6 +43,16 @@ public class DaoReivindicacao extends GenericDAO<Reivindicacao> {
         Criteria crit = s.createCriteria(Reivindicacao.class);
         crit.add(Restrictions.eq("usuario", usuario));
         crit.add(Restrictions.eq("status", status));
+        return crit.list();
+    }
+    
+      public List<Reivindicacao> ListaEntreDatas(Date dataInicial,Date dataFinal) {
+
+        SessionFactory sf = new Configuration().configure().buildSessionFactory();
+        Session s = sf.openSession();
+        Criteria crit = s.createCriteria(Reivindicacao.class);
+        crit.add(Restrictions.between("data", dataInicial, dataFinal));
+
         return crit.list();
     }
 

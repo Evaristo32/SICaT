@@ -17,12 +17,10 @@ public class IncluirStatusReprovadaCoordenador extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
 
-        String msgSucesso = "";
-        String msgAlerta = "";
         String localParaDirecionar = "";
         Reivindicacao reivindicacao = null;
         List<Reivindicacao> reivindicacoes = null;
-        
+
         DaoReivindicacao daoReivindicacao = new DaoReivindicacao();
 
         String desc = request.getParameter("descricaoDaRejeicao");
@@ -37,25 +35,28 @@ public class IncluirStatusReprovadaCoordenador extends HttpServlet {
             reivindicacao.setDescricaoDaRejeicao(request.getParameter(desc));
             reivindicacao.setRejeitadaPeloUsuario(request.getUserPrincipal().toString());
 
-            msgSucesso = "Reivindicação de n° " + reivindicacao.getIdReivindicacao() + " reprovada com sucesso.";
+            String msgSucesso = "Reivindicação de n° " + reivindicacao.getIdReivindicacao() + " reprovada com sucesso.";
+            request.setAttribute("msgSucesso", msgSucesso);
             localParaDirecionar = "analizarReivindicacaoCoordenador.jsp";
 
             daoReivindicacao.AlterarReuniao(reivindicacao);
 
             reivindicacoes = daoReivindicacao.findByStatus("Aberta");
+            List<Reivindicacao> reivindicacoesAprovadas = daoReivindicacao.findByStatus("Aprovada");
+            request.setAttribute("reivindicacoesAprovadas", reivindicacoesAprovadas);
         }
         if (desc.trim().equals("")) {
-            msgAlerta = "Campo descrição da rejeição é obrigatório.";
+            String msgAlerta = "Campo descrição da rejeição é obrigatório.";
+            request.setAttribute("msgAlerta", msgAlerta);
             long id = Long.parseLong(request.getParameter("idReivindicacao"));
             reivindicacao = (Reivindicacao) daoReivindicacao.BuscarPorId(Reivindicacao.class, id);
             localParaDirecionar = "VisualizarReivindicacaoCoordenador.jsp";
 
         }
-        
+
         request.setAttribute("reivindicacao", reivindicacao);
         request.setAttribute("reivindicacoes", reivindicacoes);
-        request.setAttribute("msgAlerta", msgAlerta);
-        request.setAttribute("msgSucesso", msgSucesso);
+
         RequestDispatcher dispatcher = request.getRequestDispatcher(localParaDirecionar);
         dispatcher.forward(request, response);
 

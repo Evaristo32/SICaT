@@ -18,8 +18,6 @@ public class IncluirStatusReprovada extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
 
-        String msgSucesso = "";
-        String msgAlerta = "";
         String localParaDirecionar = "";
         Reivindicacao reivindicacao = null;
 
@@ -39,24 +37,32 @@ public class IncluirStatusReprovada extends HttpServlet {
 
             List<Reivindicacao> reivindicacoes = daoReivindicacao.findByStatus("Aberta");
             request.setAttribute("reivindicacoes", reivindicacoes);
-            
-             msgSucesso = "Reivindicação de n° " + reivindicacao.getIdReivindicacao() + " aprovada com sucesso.";
+
+            String msgSucesso = "Reivindicação de n° " + reivindicacao.getIdReivindicacao() + " reprovada com sucesso.";
+            request.setAttribute("msgSucesso", msgSucesso);
             localParaDirecionar = "analizarReivindicacao.jsp";
 
-           
+            List<Reivindicacao> reivindicacoesAbertas = daoReivindicacao.findByStatus("Aberta");
+            List<Reivindicacao> reivindicacoesAprovadas = daoReivindicacao.findByStatus("Aprovada");
+            List<Reivindicacao> reivindicacoesConfirmada = daoReivindicacao.findByStatus("Confirmada");
+            request.setAttribute("reivindicacoesAbertas", reivindicacoesAbertas);
+            request.setAttribute("reivindicacoesAprovadas", reivindicacoesAprovadas);
+            request.setAttribute("reivindicacoesConfirmada", reivindicacoesConfirmada);
 
         }
 
         if (desc.trim().equals("")) {
-            msgAlerta = "Campo descrição da rejeição é obrigatório.";
+
+            String msgAlerta = "Campo descrição da rejeição é obrigatório.";
+            request.setAttribute("msgAlerta", msgAlerta);
+
             long id = Long.parseLong(request.getParameter("idReivindicacao"));
             reivindicacao = (Reivindicacao) daoReivindicacao.BuscarPorId(Reivindicacao.class, id);
             localParaDirecionar = "VisualizarReivindicacao.jsp";
         }
 
         request.setAttribute("reivindicacao", reivindicacao);
-        request.setAttribute("msgAlerta", msgAlerta);
-        request.setAttribute("msgSucesso", msgSucesso);
+
         RequestDispatcher dispatcher = request.getRequestDispatcher(localParaDirecionar);
         dispatcher.forward(request, response);
 

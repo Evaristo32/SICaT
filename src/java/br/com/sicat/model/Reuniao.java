@@ -11,6 +11,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import javax.persistence.CascadeType;
+import javax.persistence.FetchType;
+
 @Entity
 public class Reuniao {
 
@@ -34,8 +37,10 @@ public class Reuniao {
 
     @Temporal(TemporalType.TIME)
     private Date hora;
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     private List<Reivindicacao> reivindicacoes;
+    
+    
 
     private String campos;
 
@@ -50,7 +55,6 @@ public class Reuniao {
 //    public void setUsuario(String usuario) {
 //        this.usuario = usuario;
 //    }
-
 //    public String getConfirmadaPorUsuario() {
 //        return ConfirmadaPorUsuario;
 //    }
@@ -58,7 +62,6 @@ public class Reuniao {
 //    public void setConfirmadaPorUsuario(String ConfirmadaPorUsuario) {
 //        this.ConfirmadaPorUsuario = ConfirmadaPorUsuario;
 //    }
-
     public String getDescricaoDaRejeicao() {
         return descricaoDaRejeicao;
     }
@@ -114,8 +117,7 @@ public class Reuniao {
     public void setRejeitadaPeloUsuario(String rejeitadaPeloUsuario) {
         this.rejeitadaPeloUsuario = rejeitadaPeloUsuario;
     }
-    
-   
+
     public Date getData() {
         return data;
     }

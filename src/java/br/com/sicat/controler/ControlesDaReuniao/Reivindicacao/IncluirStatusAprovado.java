@@ -24,7 +24,8 @@ public class IncluirStatusAprovado extends HttpServlet {
         reivindicacao.setStatus("Aprovada");
         reivindicacao.setAprovadaPeloRepresentante(request.getUserPrincipal().toString());
         daoReivindicacao.AlterarReuniao(reivindicacao);
-        
+        List<Reivindicacao> reivindicacoesConfirmada = daoReivindicacao.findByStatus("Confirmada");
+        request.setAttribute("reivindicacoesConfirmada", reivindicacoesConfirmada);
         String msgSucesso = "Reivindicação de n° " + reivindicacao.getIdReivindicacao() + " aprovada com sucesso.";
         request.setAttribute("msgSucesso", msgSucesso);
         List<Reivindicacao> reivindicacoesAprovadas = daoReivindicacao.findByStatus("Aprovada");
